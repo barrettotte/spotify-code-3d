@@ -20,6 +20,14 @@ Example: Tool Lateralus - `spotify:album:5l5m1hnH4punS1GQXgEi3T`
 
 See [example/](example/) for example of generated files.
 
+## Summary
+
+- Get Spotify URI via stdin
+- Request SVG from Spotify's site - [Spotify Codes](https://www.spotifycodes.com/#create)
+- Clean up SVG and make background transparent
+- Pass SVG path and additional parameters to OpenSCAD CLI
+- Extrude SVG down into base OpenSCAD model
+
 ## References
 
 - https://www.spotifycodes.com/#create
