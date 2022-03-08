@@ -12,9 +12,13 @@ automate it. Additionally, I wanted a really small OpenSCAD project to work on.
 
 ## Usage
 
-Tool Lateralus - `spotify:album:5l5m1hnH4punS1GQXgEi3T`
+In Spotify, right click > Share > Copy Spotify URI
 
-https://www.spotifycodes.com/downloadCode.php?uri=svg%2FFFFFFF%2Fblack%2F640%2Fspotify%3Aalbum%3A5l5m1hnH4punS1GQXgEi3T
+Example: Tool Lateralus - `spotify:album:5l5m1hnH4punS1GQXgEi3T`
+
+`python3 spotify3dgen.py spotify:album:5l5m1hnH4punS1GQXgEi3T`
+
+See [example/](example/) for example of generated files.
 
 ## References
 

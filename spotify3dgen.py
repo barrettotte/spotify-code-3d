@@ -1,28 +1,16 @@
 # Generate 3D-printable keychain thing for Spotify codes.
-
-import os
-import re
-import requests
-import sys
+import os, re, requests, subprocess, sys
 import xml.etree.ElementTree as ET
 
-# web page constants - https://www.spotifycodes.com/#create
-CODE_URL = 'https://www.spotifycodes.com/downloadCode.php'
-CODE_WIDTH = 320
-PX_TO_MM = 0.2645833333
-
 # fetch spotify code SVG
-def get_code_svg(spotify_uri):
-    bg = 'FFFFFF'
-    bar = 'black'
-
+def get_code_svg(spotify_uri, width):
     target = requests.utils.quote(spotify_uri)
-    req = f'{CODE_URL}?uri=svg%2F{bg}%2F{bar}%2F{CODE_WIDTH}%2F{target}'
+    req = f'https://www.spotifycodes.com/downloadCode.php?uri=svg%2FFFFFFF%2Fblack%2F{width}%2F{target}'
     resp = requests.get(req)
 
     if resp.status_code != 200 or len(resp.content) == 0:
         raise Exception('Spotify codes request failed: ({}) - {}'.format(resp.status_code, req))
-
+    
     # delete background from svg
     svg_raw = re.sub(' xmlns="[^"]+"', '', resp.content.decode()) # fix namespace
     svg = ET.fromstring(svg_raw)
@@ -30,33 +18,36 @@ def get_code_svg(spotify_uri):
     return ET.tostring(svg)
 
 def main():
-    # TODO: command line args
-    spotify_uri = 'spotify:album:5l5m1hnH4punS1GQXgEi3T'
-    
     try:
-        svg_data = get_code_svg(spotify_uri)
-    except Exception as e:
-        print(f'failed to fetch Spotify code SVG {e}')
-        sys.exit(1)
+        svg_out = None
+        svg_size = [320, 80]
 
-    svg_out = spotify_uri.replace(':', '_') + '.svg'
-    
-    svg_out = 'test.svg' # TODO:
-    print(f'{CODE_WIDTH * PX_TO_MM} pixels') # TODO:
-    
-    try:
+        if len(sys.argv) != 2:
+            raise ValueError('Usage: py spotify3dgen.py SPOTIFY_URI')
+        spotify_uri = sys.argv[1]
+
+        if not spotify_uri.startswith('spotify'):
+            raise ValueError("Invalid Spotify URI. Expected to start with 'spotify:'")
+
+        spotify_file = spotify_uri.replace(':', '_')
+        svg_out =  spotify_file + '.svg'
         with open(svg_out, 'wb') as f:
-            f.write(svg_data)
-    except Exception as e:
-        print(f'unexpected error {e}')
-        sys.exit(2)
-    finally:
-        # if os.path.exists(svg_out):
-        #     os.remove(svg_out)
-        pass
+            f.write(get_code_svg(spotify_uri, svg_size[0])) # temp file
 
-    # TODO: check for openscad existence
-    # TODO: launch separate process for openscad build, passing svg
-    # TODO: output stl and where it was generated
+        print(f'Generating STL to {spotify_file}.stl using ${svg_out}')
+        subprocess.run([
+            'openscad', 
+            '-o', f'{spotify_file}.stl', 
+            '-D', f'svg_path="{svg_out}"',
+            '-D', f'svg_width={svg_size[0]}',
+            '-D', f'svg_height={svg_size[1]}',
+            'spotify_code.scad'
+        ])
+    except Exception as e:
+        print(f'Error generating 3D spotify code.\n{e}')
+        sys.exit(1)
+    finally:
+        if svg_out and os.path.exists(svg_out):
+            os.remove(svg_out)
 
 if __name__ == "__main__": main()
