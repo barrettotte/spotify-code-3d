@@ -5,10 +5,12 @@ Generate 3D-printable keychain thing for Spotify codes in one command.
 I came across [this Thingiverse post](https://www.thingiverse.com/thing:4758473) and thought it'd be cool to
 automate it. Additionally, I wanted a really small OpenSCAD project to work on.
 
+TODO: add picture
+
 ## Requirements
 
 - Python 3+
-- OpenSCAD 
+- OpenSCAD 2019.05+
 
 ## Usage
 
@@ -17,6 +19,8 @@ In Spotify, right click > Share > Copy Spotify URI
 Example: Tool Lateralus - `spotify:album:5l5m1hnH4punS1GQXgEi3T`
 
 `python3 spotify3dgen.py spotify:album:5l5m1hnH4punS1GQXgEi3T`
+
+Then feed the `.stl` into a slicing program and print.
 
 See [example/](example/) for example of generated files.
 
@@ -31,3 +35,4 @@ See [example/](example/) for example of generated files.
 ## References
 
 - https://www.spotifycodes.com/#create
+- Inspiration - https://www.thingiverse.com/thing:4758473
