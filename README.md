@@ -5,7 +5,7 @@ Generate 3D-printable keychain thing for Spotify codes in one command.
 I came across [this Thingiverse post](https://www.thingiverse.com/thing:4758473) and thought it'd be cool to
 automate it. Additionally, I wanted a really small OpenSCAD project to work on.
 
-TODO: add picture
+![example/lateralus.jpg](example/lateralus.jpg)
 
 ## Requirements
 
