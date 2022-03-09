@@ -26,7 +26,7 @@ def main():
             raise ValueError('Usage: py spotify3dgen.py SPOTIFY_URI')
         spotify_uri = sys.argv[1]
 
-        if not spotify_uri.startswith('spotify'):
+        if not spotify_uri.startswith('spotify:'):
             raise ValueError("Invalid Spotify URI. Expected to start with 'spotify:'")
 
         spotify_file = spotify_uri.replace(':', '_')
